@@ -1,5 +1,6 @@
 import Head from "next/head";
 
+import ChallengeBox from "components/ChallengeBox";
 import Countdown from "components/Countdown";
 import CompletedChallenges from "components/CompletedChallenges";
 import ExperienceBar from "components/ExperienceBar";
@@ -23,7 +24,9 @@ function MyApp() {
             <CompletedChallenges />
             <Countdown />
           </div>
-          <div></div>
+          <div>
+            <ChallengeBox />
+          </div>
         </section>
       </div>
     </>
