@@ -7,9 +7,9 @@ import styles from "styles/components/Countdown.module.css";
 let countdownTimeout: NodeJS.Timeout;
 
 const Countdown: React.FC = () => {
-  const { startNewChallenge } = useChallenge();
+  const { startNewChallenge, activeChallenge } = useChallenge();
 
-  const [time, setTime] = useState(0.1 * 60);
+  const [time, setTime] = useState(0.05 * 60);
   const [isActive, setIsActive] = useState(false);
   const [hasFinished, setHasFinished] = useState(false);
 
@@ -32,7 +32,7 @@ const Countdown: React.FC = () => {
   const resetCountdown = useCallback(() => {
     clearTimeout(countdownTimeout);
     setIsActive(false);
-    setTime(0.1 * 60);
+    setTime(0.05 * 60);
   }, []);
 
   useEffect(() => {
@@ -46,6 +46,13 @@ const Countdown: React.FC = () => {
       startNewChallenge();
     }
   }, [isActive, time]);
+
+  useEffect(() => {
+    if (!activeChallenge) {
+      setHasFinished(false);
+      resetCountdown();
+    }
+  }, [activeChallenge, resetCountdown]);
 
   return (
     <>

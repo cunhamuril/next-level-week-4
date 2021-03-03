@@ -4,6 +4,7 @@ import {
   useState,
   useContext,
   useMemo,
+  useEffect,
 } from "react";
 
 import challenges from "../../challenges.json";
@@ -20,9 +21,11 @@ interface ChallengesContextData {
   challengesCompleted: number;
   activeChallenge: Challenge;
   experienceToNextLevel: number;
+  lowestExperience: number;
   levelUp: () => void;
   startNewChallenge: () => void;
   resetChallenge: () => void;
+  completeChallenge: () => void;
 }
 
 const ChallengesContext = createContext({} as ChallengesContextData);
@@ -31,6 +34,7 @@ const ChallengesProvider: React.FC = ({ children }) => {
   const [level, setLevel] = useState(1);
   const [currentExperience, setCurrentExperience] = useState(0);
   const [challengesCompleted, setChallengesCompleted] = useState(0);
+  const [lowestExperience, setLowestExperience] = useState(0);
 
   const [activeChallenge, setActiveChallenge] = useState(null);
 
@@ -54,6 +58,19 @@ const ChallengesProvider: React.FC = ({ children }) => {
     setActiveChallenge(null);
   }, []);
 
+  const completeChallenge = useCallback(() => {
+    setCurrentExperience((prev) => prev + activeChallenge.amount);
+    setChallengesCompleted((prev) => prev + 1);
+    resetChallenge();
+  }, [activeChallenge, resetChallenge]);
+
+  useEffect(() => {
+    if (currentExperience >= experienceToNextLevel) {
+      levelUp();
+      setLowestExperience(experienceToNextLevel);
+    }
+  }, [currentExperience, experienceToNextLevel, levelUp]);
+
   return (
     <ChallengesContext.Provider
       value={{
@@ -62,9 +79,11 @@ const ChallengesProvider: React.FC = ({ children }) => {
         challengesCompleted,
         activeChallenge,
         experienceToNextLevel,
+        lowestExperience,
         levelUp,
         startNewChallenge,
         resetChallenge,
+        completeChallenge,
       }}
     >
       {children}

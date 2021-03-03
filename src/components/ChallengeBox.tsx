@@ -3,7 +3,7 @@ import styles from "styles/components/ChallengeBox.module.css";
 import { useChallenge } from "hooks/ChallengesContext";
 
 const ChallengeBox: React.FC = () => {
-  const { activeChallenge, resetChallenge } = useChallenge();
+  const { activeChallenge, resetChallenge, completeChallenge } = useChallenge();
 
   return (
     <div className={styles.challengeBoxContainer}>
@@ -25,7 +25,11 @@ const ChallengeBox: React.FC = () => {
             >
               Falhei
             </button>
-            <button type="button" className={styles.challengeSucceededButton}>
+            <button
+              type="button"
+              className={styles.challengeSucceededButton}
+              onClick={completeChallenge}
+            >
               Completei
             </button>
           </footer>

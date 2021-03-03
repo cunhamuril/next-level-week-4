@@ -5,7 +5,11 @@ import styles from "styles/components/ExperienceBar.module.css";
 import { useChallenge } from "hooks/ChallengesContext";
 
 export default function ExperienceBar() {
-  const { currentExperience, experienceToNextLevel } = useChallenge();
+  const {
+    currentExperience,
+    experienceToNextLevel,
+    lowestExperience,
+  } = useChallenge();
 
   const percentToNextLevel = useMemo(() => {
     // Regra de 3 simples
@@ -16,7 +20,7 @@ export default function ExperienceBar() {
 
   return (
     <header className={styles.experienceBar}>
-      <span>0 xp</span>
+      <span>{lowestExperience} xp</span>
       <div>
         <div style={{ width: percentToNextLevel }} />
         <span
