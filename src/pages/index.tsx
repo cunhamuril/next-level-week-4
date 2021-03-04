@@ -1,5 +1,7 @@
 import Head from "next/head";
 
+import { CountdownProvider } from "hooks/CountdownContext";
+
 import ChallengeBox from "components/ChallengeBox";
 import Countdown from "components/Countdown";
 import CompletedChallenges from "components/CompletedChallenges";
@@ -18,16 +20,18 @@ function MyApp() {
       <div className={styles.container}>
         <ExperienceBar />
 
-        <section>
-          <div>
-            <Profile />
-            <CompletedChallenges />
-            <Countdown />
-          </div>
-          <div>
-            <ChallengeBox />
-          </div>
-        </section>
+        <CountdownProvider>
+          <section>
+            <div>
+              <Profile />
+              <CompletedChallenges />
+              <Countdown />
+            </div>
+            <div>
+              <ChallengeBox />
+            </div>
+          </section>
+        </CountdownProvider>
       </div>
     </>
   );

@@ -1,9 +1,23 @@
+import { useCallback } from "react";
+
 import styles from "styles/components/ChallengeBox.module.css";
 
 import { useChallenge } from "hooks/ChallengesContext";
+import { useCountdown } from "hooks/CountdownContext";
 
 const ChallengeBox: React.FC = () => {
-  const { activeChallenge, resetChallenge } = useChallenge();
+  const { activeChallenge, resetChallenge, completeChallenge } = useChallenge();
+  const { resetCountdown } = useCountdown();
+
+  const handleChallengeSucceeded = useCallback(() => {
+    completeChallenge();
+    resetCountdown();
+  }, [completeChallenge, resetCountdown]);
+
+  const handleChallengeFailed = useCallback(() => {
+    resetChallenge();
+    resetCountdown();
+  }, [resetChallenge, resetCountdown]);
 
   return (
     <div className={styles.challengeBoxContainer}>
@@ -21,11 +35,15 @@ const ChallengeBox: React.FC = () => {
             <button
               type="button"
               className={styles.challengeFailedButton}
-              onClick={resetChallenge}
+              onClick={handleChallengeFailed}
             >
               Falhei
             </button>
-            <button type="button" className={styles.challengeSucceededButton}>
+            <button
+              type="button"
+              className={styles.challengeSucceededButton}
+              onClick={handleChallengeSucceeded}
+            >
               Completei
             </button>
           </footer>
