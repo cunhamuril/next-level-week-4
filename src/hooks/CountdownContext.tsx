@@ -23,7 +23,7 @@ let countdownTimeout: NodeJS.Timeout;
 const CountdownProvider: React.FC = ({ children }) => {
   const { startNewChallenge } = useChallenge();
 
-  const [time, setTime] = useState(0.1 * 60);
+  const [time, setTime] = useState(0.05 * 60);
   const [isActive, setIsActive] = useState(false);
   const [hasFinished, setHasFinished] = useState(false);
 

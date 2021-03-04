@@ -4,6 +4,7 @@ import {
   useState,
   useContext,
   useMemo,
+  useEffect,
 } from "react";
 
 import challenges from "../../challenges.json";
@@ -49,6 +50,20 @@ const ChallengesProvider: React.FC = ({ children }) => {
     const challenge = challenges[randomChallengeIndex];
 
     setActiveChallenge(challenge);
+
+    if (Notification.permission === "granted") {
+      const notification = new Notification("Novo desafio 🎉", {
+        body: `Valendo ${challenge.amount}xp!`,
+      });
+
+      notification.onclick = () => {
+        window.focus();
+      };
+
+      notification.onshow = () => {
+        new Audio("/notification.mp3").play();
+      };
+    }
   }, []);
 
   const resetChallenge = useCallback(() => {
@@ -72,6 +87,10 @@ const ChallengesProvider: React.FC = ({ children }) => {
     setActiveChallenge(null);
     setChallengesCompleted(challengesCompleted + 1);
   }, [activeChallenge, currentExperience, experienceToNextLevel, levelUp]);
+
+  useEffect(() => {
+    Notification.requestPermission();
+  }, []);
 
   return (
     <ChallengesContext.Provider
