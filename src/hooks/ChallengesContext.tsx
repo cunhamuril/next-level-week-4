@@ -10,6 +10,8 @@ import Cookies from "js-cookie";
 
 import challenges from "../../challenges.json";
 
+import LevelUpModal from "components/LevelUpModal";
+
 interface Challenge {
   type: "body" | "eye";
   description: string;
@@ -26,6 +28,7 @@ interface ChallengesContextData {
   startNewChallenge: () => void;
   resetChallenge: () => void;
   completeChallenge: () => void;
+  closeLevelUpModal: () => void;
 }
 
 interface ChallengesProviderProps {
@@ -49,6 +52,7 @@ const ChallengesProvider: React.FC<ChallengesProviderProps> = ({
   );
 
   const [activeChallenge, setActiveChallenge] = useState(null);
+  const [isLevelUpModalOpen, setIsLevelUpModalOpen] = useState(false);
 
   const experienceToNextLevel = useMemo(() => {
     // Calculo utilizado em RPGs para calcular experiência
@@ -57,7 +61,12 @@ const ChallengesProvider: React.FC<ChallengesProviderProps> = ({
 
   const levelUp = useCallback(() => {
     setLevel(level + 1);
+    setIsLevelUpModalOpen(true);
   }, [level]);
+
+  const closeLevelUpModal = useCallback(() => {
+    setIsLevelUpModalOpen(false)
+  }, [])
 
   const startNewChallenge = useCallback(() => {
     const randomChallengeIndex = Math.floor(Math.random() * challenges.length);
@@ -124,9 +133,12 @@ const ChallengesProvider: React.FC<ChallengesProviderProps> = ({
         startNewChallenge,
         resetChallenge,
         completeChallenge,
+        closeLevelUpModal,
       }}
     >
       {children}
+
+      {isLevelUpModalOpen && <LevelUpModal />}
     </ChallengesContext.Provider>
   );
 };
