@@ -1,5 +1,6 @@
 import { useCountdown } from "hooks/CountdownContext";
 import { useMemo } from "react";
+import Head from "next/head";
 
 import styles from "styles/components/Countdown.module.css";
 
@@ -24,8 +25,16 @@ const Countdown: React.FC = () => {
     return String(seconds).padStart(2, "0").split("");
   }, [time]);
 
+  const timer = useMemo(() => {
+    return `${minuteLeft}${minuteRight}:${secondLeft}${secondRight}`;
+  }, [minuteLeft, minuteRight, secondLeft, secondRight]);
+
   return (
     <>
+      <Head>
+        <title>{timer && isActive ? `${timer} | move.it` : "move.it"}</title>
+      </Head>
+
       <div className={styles.countdownContainer}>
         <div>
           <span>{minuteLeft}</span>
